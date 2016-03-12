@@ -1,0 +1,13 @@
+Find Common and Unique files in 2 dirs
+=======================================
+
+----
+find $DIR1 -type f -exec sha1sum '{}' \; > dir1_files
+find $DIR1 -type f -exec sha1sum '{}' \; > dir2_files
+compare_sha1_lists.py dir1_files dir2_files
+----
+
+Todo
+~~~~
+
+Some parsing of the result or options in command to print files of choice
