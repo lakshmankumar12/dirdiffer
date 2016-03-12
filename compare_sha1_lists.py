@@ -8,6 +8,7 @@ import argparse
 def parseArgs():
   parser = argparse.ArgumentParser()
   parser.add_argument("-b","--both", help="Print files common in both", action="store_true")
+  parser.add_argument("-s","--supress", help="supress sha1 printing", action="store_true")
   parser.add_argument("dir1", help="file containing dir1 listing")
   parser.add_argument("dir2", help="file containing dir2 listing")
   args = parser.parse_args()
@@ -63,7 +64,8 @@ if __name__ == '__main__':
   for i in range(2):
     print("Only in %s .. count: %d"%(names[i],len(onlyFiles[i])))
     for sha in onlyFiles[i]:
-      print (sha)
+      if not args.supress:
+        print (sha)
       for j in collection[sha][i]:
         print("%s"%j)
       print("--")
@@ -71,7 +73,8 @@ if __name__ == '__main__':
   print ("Available in both .. count:%d"%(len(both)))
   if args.both:
     for sha in both:
-      print(sha)
+      if not args.supress:
+        print(sha)
       for i in range(2):
         for j in collection[sha][i]:
           print ("%s  %s"%(names[i],j))
