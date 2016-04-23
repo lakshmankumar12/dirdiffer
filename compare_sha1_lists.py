@@ -9,6 +9,7 @@ def parseArgs():
   parser = argparse.ArgumentParser()
   parser.add_argument("-b","--both", help="Print files common in both", action="store_true")
   parser.add_argument("-s","--supress", help="supress sha1 printing", action="store_true")
+  parser.add_argument("-w","--writefile", help="write-in-file <file>-dir1 <file>-dir2 <file-both>")
   parser.add_argument("dir1", help="file containing dir1 listing")
   parser.add_argument("dir2", help="file containing dir2 listing")
   args = parser.parse_args()
@@ -62,23 +63,37 @@ if __name__ == '__main__':
   print("We found %d files in %s and %d files in %s"%(count1,args.dir1,count2,args.dir2))
   names=[args.dir1,args.dir2]
   for i in range(2):
+    if args.writefile:
+      f=open(args.writefile + 'dir%d'%(i+1), 'w')
     print("Only in %s .. count: %d"%(names[i],len(onlyFiles[i])))
     for sha in onlyFiles[i]:
       if not args.supress:
         print (sha)
       for j in collection[sha][i]:
         print("%s"%j)
+        if args.writefile:
+          print("%s"%j,file=f)
       print("--")
+      if args.writefile:
+        print("--",file=f)
+    if args.writefile:
+      f.close()
     print("----")
   print ("Available in both .. count:%d"%(len(both)))
   if args.both:
+    if args.writefile:
+      f=open(args.writefile + 'both', 'w')
     for sha in both:
       if not args.supress:
         print(sha)
       for i in range(2):
         for j in collection[sha][i]:
           print ("%s  %s"%(names[i],j))
+          if args.writefile:
+            print ("%s  %s"%(names[i],j),file=f)
       print("--")
+      if args.writefile:
+        print("--",file=f)
 
 
 
